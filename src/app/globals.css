@@ -1,0 +1,170 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: 240 10% 3.9%;
+  --foreground: 0 0% 98%;
+  --card: 240 10% 5.5%;
+  --card-foreground: 0 0% 98%;
+  --popover: 240 10% 5%;
+  --popover-foreground: 0 0% 98%;
+  --primary: 162 84% 39%;
+  --primary-foreground: 160 40% 6%;
+  --secondary: 220 14% 12%;
+  --secondary-foreground: 0 0% 98%;
+  --muted: 220 12% 12%;
+  --muted-foreground: 215 10% 68%;
+  --accent: 192 90% 48%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 72% 56%;
+  --destructive-foreground: 0 0% 98%;
+  --success: 142 71% 50%;
+  --success-foreground: 0 0% 100%;
+  --warning: 38 92% 55%;
+  --warning-foreground: 0 0% 100%;
+  --info: 199 89% 60%;
+  --info-foreground: 0 0% 100%;
+  --border: 240 6% 16%;
+  --input: 240 6% 16%;
+  --ring: 162 84% 39%;
+  --radius: 0.7rem;
+  --neon-blue: 192 90% 48%;
+  --neon-purple: 162 84% 39%;
+  --neon-pink: 168 70% 42%;
+}
+
+.light {
+  --background: 0 0% 100%;
+  --foreground: 240 10% 3.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 240 10% 3.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 240 10% 3.9%;
+  --primary: 263 70% 55%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 240 5% 96%;
+  --secondary-foreground: 240 6% 10%;
+  --muted: 240 5% 96%;
+  --muted-foreground: 240 4% 46%;
+  --accent: 199 89% 50%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 98%;
+  --success: 142 71% 45%;
+  --success-foreground: 0 0% 100%;
+  --warning: 38 92% 50%;
+  --warning-foreground: 0 0% 100%;
+  --info: 199 89% 50%;
+  --info-foreground: 0 0% 100%;
+  --border: 240 6% 90%;
+  --input: 240 6% 90%;
+  --ring: 263 70% 55%;
+}
+
+* {
+  border-color: hsl(var(--border));
+}
+
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-feature-settings: "rlig" 1, "calt" 1;
+  background-image:
+    radial-gradient(at 8% -10%, hsla(162, 84%, 39%, 0.18) 0px, transparent 46%),
+    radial-gradient(at 92% 0%, hsla(192, 90%, 48%, 0.12) 0px, transparent 42%),
+    linear-gradient(180deg, hsl(222 18% 4%) 0%, hsl(220 14% 6%) 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+/* Glassmorphism utility */
+.glass {
+  background: hsl(var(--card) / 0.55);
+  backdrop-filter: blur(14px) saturate(150%);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+  border: 1px solid hsl(var(--border) / 0.8);
+}
+
+.glass-strong {
+  background: hsl(var(--card) / 0.85);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid hsl(var(--border));
+}
+
+/* Neon glow effects */
+.neon-blue {
+  box-shadow: 0 0 12px hsla(var(--neon-blue), 0.45), 0 0 24px hsla(var(--neon-blue), 0.2);
+}
+.neon-purple {
+  box-shadow: 0 0 12px hsla(var(--neon-purple), 0.45), 0 0 24px hsla(var(--neon-purple), 0.2);
+}
+.neon-text-blue {
+  text-shadow: 0 0 8px hsla(var(--neon-blue), 0.6);
+}
+.neon-text-purple {
+  text-shadow: 0 0 8px hsla(var(--neon-purple), 0.6);
+}
+
+/* Animated grid background */
+.cyber-grid {
+  background-image:
+    linear-gradient(hsl(var(--border) / 0.4) 1px, transparent 1px),
+    linear-gradient(90deg, hsl(var(--border) / 0.4) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.3);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.5);
+}
+
+/* Status pulse */
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 hsl(var(--success) / 0.6); }
+  70% { box-shadow: 0 0 0 8px hsl(var(--success) / 0); }
+  100% { box-shadow: 0 0 0 0 hsl(var(--success) / 0); }
+}
+.pulse-success {
+  animation: pulse-ring 2s infinite;
+}
+@keyframes pulse-ring-red {
+  0% { box-shadow: 0 0 0 0 hsl(var(--destructive) / 0.6); }
+  70% { box-shadow: 0 0 0 8px hsl(var(--destructive) / 0); }
+  100% { box-shadow: 0 0 0 0 hsl(var(--destructive) / 0); }
+}
+.pulse-destructive {
+  animation: pulse-ring-red 2s infinite;
+}
+
+/* Diff syntax */
+.diff-add {
+  background: hsl(var(--success) / 0.15);
+  color: hsl(var(--success));
+}
+.diff-del {
+  background: hsl(var(--destructive) / 0.15);
+  color: hsl(var(--destructive));
+}
+.diff-context {
+  color: hsl(var(--muted-foreground));
+}
+
+/* Mono font helper */
+.font-mono-code {
+  font-family: var(--font-geist-mono), ui-monospace, "SF Mono", Menlo, monospace;
+  font-feature-settings: "liga" 0;
+}

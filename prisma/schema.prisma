@@ -1,0 +1,84 @@
+// AI Dev Control Center — Prisma Schema
+// Post-111 Production Hardening: persistent auth, approvals, audit
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ============ Authentication ============
+
+model User {
+  id           String         @id @default(cuid())
+  username     String         @unique
+  passwordHash String
+  role         String         @default("operator") // viewer, analyst, operator, admin
+  createdAt    DateTime       @default(now())
+  sessions     Session[]
+  approvals    ApprovalRecord[]
+  auditEvents  AuditEvent[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  ip        String?
+  userAgent String?
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+// ============ Phase 3: Approval System (persistent) ============
+
+model ApprovalRecord {
+  id          String    @id @default(cuid())
+  action      String    // deploy, rollback, merge, commit
+  target      String    // e.g. "PR #42", "deployment dpl_abc123"
+  repository  String?
+  pullRequest Int?
+  commitSha   String?
+  actorId     String
+  actor       User      @relation(fields: [actorId], references: [id])
+  status      String    @default("pending") // pending, approved, rejected, consumed, expired
+  reason      String
+  createdAt   DateTime  @default(now())
+  expiresAt   DateTime
+  consumedAt  DateTime?
+  metadata    String    @default("{}") // JSON string
+
+  @@index([action, target, status])
+  @@index([actorId])
+  @@index([expiresAt])
+}
+
+// ============ Phase 7: Audit Log (persistent) ============
+
+model AuditEvent {
+  id         String   @id @default(cuid())
+  timestamp  DateTime @default(now())
+  actorId    String?
+  actor      User?    @relation(fields: [actorId], references: [id], onDelete: SetNull)
+  action     String
+  target     String?
+  repository String?
+  commitSha  String?
+  requestId  String?
+  result     String   // success, failure, denied, warning
+  reason     String?
+  metadata   String   @default("{}") // JSON string
+  ip         String?
+
+  @@index([action])
+  @@index([actorId])
+  @@index([timestamp])
+  @@index([result])
+}

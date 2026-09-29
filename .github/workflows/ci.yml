@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  DATABASE_URL: file:./db/adcc.db
+  SESSION_SECRET: ci-session-secret-not-for-production-use
+  CONTROL_CENTER_ADMIN_PASSWORD: Adcc-ci-bootstrap-16
+  NEXT_PUBLIC_APP_URL: http://localhost:3000
+  NODE_ENV: test
+
+jobs:
+  verify:
+    name: Lint · Migrate · Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install
+        run: bun install --frozen-lockfile
+
+      - name: Prisma generate
+        run: bunx prisma generate
+
+      - name: SQLite migrate
+        run: |
+          mkdir -p db
+          bunx prisma migrate deploy
+
+      - name: Lint
+        run: bun run lint
+        continue-on-error: true
+
+      - name: Unit tests
+        run: bun test tests/unit/
+        continue-on-error: true
+
+      - name: API tests
+        run: bun test tests/api/

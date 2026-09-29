@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Aidev Ops">
+  <rect width="128" height="128" fill="#000"/>
+  <path d="M18 108 L64 12 L110 108 H92 L64 48 L36 108 Z" fill="#fff"/>
+  <path d="M50 72 L64 44 L78 72 Z" fill="#000"/>
+  <rect x="30" y="78" width="68" height="10" fill="#C8FF00"/>
+  <rect x="58" y="58" width="12" height="12" fill="#C8FF00"/>
+</svg>
